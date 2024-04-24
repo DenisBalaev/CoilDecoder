@@ -8,7 +8,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.coildecoder.databinding.ActivityMainBinding
 import jakarta.xml.bind.DatatypeConverter
 import java.math.BigInteger
-import kotlin.experimental.and
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val list = listOf("FF","01")
+        val list = listOf("FF", "01")
         /*val res1 = decoderValueParameterDetailCoil(argList = list, radr = 1, charactersBinary = 10)
         val res2 = decoderValueParameterDetailCoil2(argList = list, radr = 1, charactersBinary = 10)
         val res3 = decoderValueParameterDetailCoil3(argList = list, radr = 1, charactersBinary = 10)
@@ -48,7 +47,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val bin5 = BaseEncoding.base16().decode(string)
         val bin = "c000060000".decodeHex().toString()  //https://square.github.io/okio/ */
         Log.d("LIST_BINARY_MAP", hex)
-        Log.d("LIST_BINARY_MAP", (bin == "101010100000000110101010000000011010101000000001101010100000000111111111").toString())
+        Log.d(
+            "LIST_BINARY_MAP",
+            (bin == "101010100000000110101010000000011010101000000001101010100000000111111111").toString()
+        )
         viewBinding.tv.text = bin + " ${bin?.length}"
     }
 
@@ -57,14 +59,23 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return bin
     }
 
-    private fun decoderValueParameterDetailCoil4(argList: List<String>, radr: Int, charactersBinary: Int): List<ParameterValueUI>{
+    private fun decoderValueParameterDetailCoil4(
+        argList: List<String>,
+        radr: Int,
+        charactersBinary: Int
+    ): List<ParameterValueUI> {
         val valueInt = argList.reversed().joinToString(separator = "").toDecimalMoreTwo()
-        return String.format("%${charactersBinary}s", valueInt.toString(2)).replace(' ', '0').reversed().mapIndexed { index, c ->
-            ParameterValueUI(pin = radr + index, value = c.toString())
-        }
+        return String.format("%${charactersBinary}s", valueInt.toString(2)).replace(' ', '0')
+            .reversed().mapIndexed { index, c ->
+                ParameterValueUI(pin = radr + index, value = c.toString())
+            }
     }
 
-    private fun decoderValueParameterDetailCoil(argList: List<String>, radr: Int, charactersBinary: Int): List<ParameterValueUI> {
+    private fun decoderValueParameterDetailCoil(
+        argList: List<String>,
+        radr: Int,
+        charactersBinary: Int
+    ): List<ParameterValueUI> {
         var pin = radr
         val maxRadr = radr + charactersBinary - 1
         val countListToList = 2
@@ -87,16 +98,20 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return list
     }
 
-    private fun decoderValueParameterDetailCoil2(argList: List<String>, radr: Int, charactersBinary: Int): List<ParameterValueUI> {
+    private fun decoderValueParameterDetailCoil2(
+        argList: List<String>,
+        radr: Int,
+        charactersBinary: Int
+    ): List<ParameterValueUI> {
         val countListToList = 2
         val countBit = countListToList * 8
         val list = argList.reversed().chunked(countListToList)
             .map { it.joinToString(separator = "") }.joinToString(separator = "") { str ->
                 str.toDecimalMoreTwo().toBinaryStringCustom(countBit).reversed()
             }
-            .substring(0,charactersBinary)
+            .substring(0, charactersBinary)
 
-        Log.d("LIST_BINARY_MAP_Item",list.toString())
+        Log.d("LIST_BINARY_MAP_Item", list.toString())
 
         return list.mapIndexed { index, c ->
             ParameterValueUI(pin = radr + index, value = c.toString())
@@ -105,7 +120,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun decoderValueParameterDetailCoil3(
         radr: Int,
-        charactersBinary:Int,
+        charactersBinary: Int,
         argList: List<String>
     ): List<ParameterValueUI> {
         /*val str = argList.reversed().joinToString(separator = "")
@@ -126,20 +141,20 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 }
 
-data class ParameterValueUI (
-    val pin:Int,
-    val value:String
+data class ParameterValueUI(
+    val pin: Int,
+    val value: String
 )
 
-fun String.toDecimalMoreTwo():Int{
+fun String.toDecimalMoreTwo(): Int {
     return Integer.parseInt(this, 16)
 }
 
-fun Int.toBinaryStringCustom(charactersBinary:Int):String{
+fun Int.toBinaryStringCustom(charactersBinary: Int): String {
     return String.format("%${charactersBinary}s", Integer.toBinaryString(this)).replace(' ', '0')
 }
 
-fun String.toDec():String{
+fun String.toDec(): String {
     return "%0d".format(this)
 }
 
