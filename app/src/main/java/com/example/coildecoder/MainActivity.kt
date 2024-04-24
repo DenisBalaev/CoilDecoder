@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.coildecoder.databinding.ActivityMainBinding
-import jakarta.xml.bind.DatatypeConverter
 import java.math.BigInteger
 
 
@@ -39,9 +38,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         viewBinding.tv.text = viewBinding.tv.text.toString() + "\n" + String.format("%16s", "01FF".toDecimalMoreTwo().toString(2)).replace(' ', '0').reversed()*/
 
         //val hex = list.reversed().joinToString("")
-        val hex = "AA01AA01AA01AA01FF"
-        //val bin = HexToBinary(hex)
-        val bin = DatatypeConverter.printHexBinary(DatatypeConverter.parseHexBinary(hex))
+        val hex = "AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01AA01"
+        val bin = toHexToBinary(hex,8)
+        //val bin = DatatypeConverter.printHexBinary(DatatypeConverter.parseHexBinary(hex))
         /*val bin3 = HexFormat.of().parseHex(hex)
         val bin4 = Hex.decodeHex("00A0BF") \\ http://commons.apache.org/codec/
         val bin5 = BaseEncoding.base16().decode(string)
@@ -49,14 +48,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         Log.d("LIST_BINARY_MAP", hex)
         Log.d(
             "LIST_BINARY_MAP",
-            (bin == "101010100000000110101010000000011010101000000001101010100000000111111111").toString()
+            (bin == "10101010000000011010101000000001101010100000000110101010000000011010101000000001101010100000000110101010000000011010101000000001").toString()
         )
         viewBinding.tv.text = bin + " ${bin?.length}"
     }
 
-    fun HexToBinary(hex: String?): String? {
-        var bin = BigInteger(hex, 16).toString(2)
-        return bin
+    private fun toHexToBinary(hex: String, charactersBinary:Int): String? {
+        val bin = BigInteger(hex, 16).toString(2)
+        return String.format("%${charactersBinary}s", bin).replace(' ', '0')
     }
 
     private fun decoderValueParameterDetailCoil4(
